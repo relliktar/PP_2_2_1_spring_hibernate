@@ -6,33 +6,36 @@ import javax.persistence.*;
 @Table(name = "cars")
 public class Car {
     @Id
-    @Column(name = "user_id")
-    private Long user_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "car_id")
+    private Long carId;
     @Column(name = "model")
     private String model;
     @Column(name = "series")
     private int series;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "car")
     private User user;
 
     public void setUser(User user) {
+        user.setCar(this);
         this.user = user;
     }
-    public User getUser(){
+
+    public User getUser() {
         return user;
     }
 
     public Car() {
     }
-    public Car(String model, int series){
+
+    public Car(String model, int series) {
         this.model = model;
         this.series = series;
     }
 
-    public void setId(Long user_id) {
-        this.user_id = user_id;
+    public void setId(Long carId) {
+        this.carId = carId;
     }
 
     public void setModel(String model) {
@@ -43,8 +46,8 @@ public class Car {
         this.series = series;
     }
 
-    public Long getId() {
-        return user_id;
+    public Long getCarId() {
+        return carId;
     }
 
     public String getModel() {
@@ -53,5 +56,15 @@ public class Car {
 
     public int getSeries() {
         return series;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Car{");
+        sb.append("carId=").append(carId);
+        sb.append(", model='").append(model).append('\'');
+        sb.append(", series=").append(series);
+        sb.append('}');
+        return sb.toString();
     }
 }

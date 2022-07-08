@@ -13,4 +13,6 @@ public interface UserDao {
     List<User> listUsers();
 
     User getUserByCarModelAndSeries(String model, int series);
+
+    void clearTable();
 }

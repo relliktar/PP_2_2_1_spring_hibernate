@@ -2,19 +2,27 @@ package hiber.dao;
 
 import hiber.model.Car;
 import hiber.model.User;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserDaoImp implements UserDao {
 
+
+    private final SessionFactory sessionFactory;
+
     @Autowired
-    private SessionFactory sessionFactory;
+    public UserDaoImp(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public void add(User user) {
@@ -35,9 +43,17 @@ public class UserDaoImp implements UserDao {
     @Override
     public User getUserByCarModelAndSeries(String model, int series) {
         Query query = sessionFactory.getCurrentSession()
-                .createQuery("FROM User user WHERE user.id IN (SELECT car.id FROM Car car WHERE car.model = :model AND car.series = :series)");
+                .createQuery("FROM Car car WHERE car.series = :series AND car.model = :model");
         query.setParameter("model", model);
         query.setParameter("series", series);
-        return (User) query.getSingleResult();
+        Car car = (Car) query.getSingleResult();
+        return car.getUser();
     }
+
+    public void clearTable() {
+        Session session = sessionFactory.getCurrentSession();
+        session.createQuery("DELETE FROM User user").executeUpdate();
+        session.createQuery("DELETE FROM Car car").executeUpdate();
+    }
+
 }

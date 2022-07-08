@@ -15,33 +15,27 @@ public class MainApp {
                 new AnnotationConfigApplicationContext(AppConfig.class);
 
         UserService userService = context.getBean(UserService.class);
-        int i = userService.listUsers().size();
+        userService.clearTable();
         for (int a = 1; a < 11; a++) {
-            User user = new User("User" + (a + i), "Lastname" + (a + i), "user" + (a + i) + "@mail.ru");
-            Car car = new Car("model" + (a + i), a + i);
-            car.setUser(user);
+            User user = new User("User" + a, "Lastname" + a, "user" + a + "@mail.ru");
+            Car car = new Car("model" + a, a );
             userService.add(user);
+            car.setUser(user);
             userService.add(car);
         }
-//        userService.add(new User("User1", "Lastname1", "user1@mail.ru"));
-//        userService.add(new User("User2", "Lastname2", "user2@mail.ru"));
-//        userService.add(new User("User3", "Lastname3", "user3@mail.ru"));
-//        userService.add(new User("User4", "Lastname4", "user4@mail.ru"));
+
+        System.out.println();
 
         List<User> users = userService.listUsers();
-        for (User user : users) {
-            System.out.println("Id = " + user.getId());
-            System.out.println("First Name = " + user.getFirstName());
-            System.out.println("Last Name = " + user.getLastName());
-            System.out.println("Email = " + user.getEmail());
-            System.out.println();
-        }
-        User userByModel = userService.getUserByCarModelAndSeries("model10", 10);
-        System.out.println("Id = " + userByModel.getId());
-        System.out.println("First Name = " + userByModel.getFirstName());
-        System.out.println("Last Name = " + userByModel.getLastName());
-        System.out.println("Email = " + userByModel.getEmail());
         System.out.println();
+
+        for (User user : users) {
+            System.out.println("    " + user);
+        }
+        System.out.println();
+        User userByModel = userService.getUserByCarModelAndSeries("model10", 10);
+
+        System.out.println("\n      "+userByModel);
 
         context.close();
     }
