@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class UserDaoImp implements UserDao {
@@ -42,12 +40,11 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public User getUserByCarModelAndSeries(String model, int series) {
-        Query query = sessionFactory.getCurrentSession()
-                .createQuery("FROM Car car WHERE car.series = :series AND car.model = :model");
+        Query<Car> query = sessionFactory.getCurrentSession()
+                .createQuery("FROM Car car WHERE car.series = :series AND car.model = :model", Car.class);
         query.setParameter("model", model);
         query.setParameter("series", series);
-        Car car = (Car) query.getSingleResult();
-        return car.getUser();
+        return query.getSingleResult().getUser();
     }
 
     public void clearTable() {
@@ -55,5 +52,4 @@ public class UserDaoImp implements UserDao {
         session.createQuery("DELETE FROM User user").executeUpdate();
         session.createQuery("DELETE FROM Car car").executeUpdate();
     }
-
 }
