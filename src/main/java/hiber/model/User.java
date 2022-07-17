@@ -19,19 +19,9 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @OneToOne
-    @JoinColumn(name = "fk_car_id", referencedColumnName = "car_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
     private Car car;
-    @Column(name = "fk_car_id", insertable = false, updatable = false)
-    private Long carId;
-
-    public Long getCarId() {
-        return carId;
-    }
-
-    public void setCarId(Long carId) {
-        this.carId = carId;
-    }
 
     public Car getCar() {
         return car;
@@ -89,7 +79,6 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", carId=" + carId +
                 '}';
     }
 }

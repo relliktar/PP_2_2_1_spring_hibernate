@@ -6,15 +6,16 @@ import javax.persistence.*;
 @Table(name = "cars")
 public class Car {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "car_id")
-    private Long carId;
+    private Long id;
     @Column(name = "model")
     private String model;
     @Column(name = "series")
     private int series;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "car")
+    @MapsId
+    @OneToOne(mappedBy = "car")
+    @JoinColumn(name = "car_id")
     private User user;
 
     public void setUser(User user) {
@@ -34,8 +35,8 @@ public class Car {
         this.series = series;
     }
 
-    public void setId(Long carId) {
-        this.carId = carId;
+    public void id(Long carId) {
+        this.id = id;
     }
 
     public void setModel(String model) {
@@ -46,8 +47,8 @@ public class Car {
         this.series = series;
     }
 
-    public Long getCarId() {
-        return carId;
+    public Long getId() {
+        return id;
     }
 
     public String getModel() {
@@ -61,7 +62,7 @@ public class Car {
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("Car{");
-        sb.append("carId=").append(carId);
+        sb.append("carId=").append(id);
         sb.append(", model='").append(model).append('\'');
         sb.append(", series=").append(series);
         sb.append('}');
