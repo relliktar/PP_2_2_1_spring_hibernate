@@ -49,8 +49,10 @@ public class UserDaoImp implements UserDao {
 
     public void clearTable() {
         Session session = sessionFactory.getCurrentSession();
-        session.createQuery("DELETE FROM User user").executeUpdate();
-        session.createQuery("DELETE FROM Car car").executeUpdate();
+        List<User> users = session.createQuery("FROM User", User.class).getResultList();
+        for (User user : users) {
+            session.delete(user);
+        }
         session.flush();
     }
 }

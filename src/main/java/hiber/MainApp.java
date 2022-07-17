@@ -15,6 +15,7 @@ public class MainApp {
                 new AnnotationConfigApplicationContext(AppConfig.class);
 
         UserService userService = context.getBean(UserService.class);
+
         userService.clearTable();
 
         for (int a = 1; a < 11; a++) {
@@ -22,12 +23,11 @@ public class MainApp {
                     "User" + a,
                     "Lastname" + a,
                     "user" + a + "@mail.ru");
-            userService.add(user);
             if (a % 2 == 0) {
                 Car car = new Car("model" + a, a);
-                car.setUser(user);
-                userService.add(car);
+                user.setCar(car);
             }
+            userService.add(user);
         }
 
         System.out.println();
@@ -36,7 +36,7 @@ public class MainApp {
         System.out.println();
 
         for (User user : users) {
-            System.out.println("    " + user);
+            System.out.println("      " + user);
         }
         System.out.println();
         User userByModel = userService.getUserByCarModelAndSeries("model10", 10);

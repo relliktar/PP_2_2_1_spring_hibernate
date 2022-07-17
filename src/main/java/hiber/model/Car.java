@@ -14,12 +14,11 @@ public class Car {
     private int series;
 
     @MapsId
-    @OneToOne(mappedBy = "car")
+    @OneToOne
     @JoinColumn(name = "car_id")
     private User user;
 
     public void setUser(User user) {
-        user.setCar(this);
         this.user = user;
     }
 
