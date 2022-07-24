@@ -14,7 +14,6 @@ import java.util.List;
 @Repository
 public class UserDaoImp implements UserDao {
 
-
     private final SessionFactory sessionFactory;
 
     @Autowired
@@ -40,19 +39,18 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public User getUserByCarModelAndSeries(String model, int series) {
-        Query<Car> query = sessionFactory.getCurrentSession()
-                .createQuery("FROM Car car WHERE car.series = :series AND car.model = :model", Car.class);
+        String a = "FROM User u JOIN FETCH u.car AS car WHERE car.series = :series AND car.model = :model";
+        Query<User> query = sessionFactory.getCurrentSession().createQuery(a, User.class);
         query.setParameter("model", model);
         query.setParameter("series", series);
-        return query.getSingleResult().getUser();
+        return query.getSingleResult();
     }
 
     public void clearTable() {
         Session session = sessionFactory.getCurrentSession();
-        List<User> users = session.createQuery("FROM User", User.class).getResultList();
-        for (User user : users) {
-            session.delete(user);
-        }
+        session.createQuery("FROM User", User.class)
+                .getResultList()
+                .forEach(session::delete);
         session.flush();
     }
 }
